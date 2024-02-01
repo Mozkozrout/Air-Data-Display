@@ -1,7 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\AuthController;
+use Illuminate\Http\Request;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -19,8 +20,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 //Public Routes
 Route::get('/login', [AuthController::class, 'index'])->name('login');
+Route::post('/handle-login', [AuthController::class, 'handleLogin'])->name('login.handle');
+Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
+//Protected Routes
 Route::group(['middleware' => ['auth:sanctum']], function(){
-    Route::get('/logout', [AuthController::class, 'logout']->name('logout'));
+
 });
 

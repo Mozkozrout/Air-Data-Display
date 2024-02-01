@@ -3,23 +3,22 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Traits\HttpResponses;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\LoginUserRequest;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Session;
 
 class AuthController extends Controller
 {
-    use HttpResponses;
 
     public function index()
     {
         return view('auth.login');
     }
 
-    public function login(LoginUserRequest $request){
+    public function handleLogin(LoginUserRequest $request){
         $request -> validated($request -> all());
 
         if(!Auth::attempt($request -> only(['username', 'password']))){
@@ -27,13 +26,11 @@ class AuthController extends Controller
         }
 
         $user = User::where('username', $request -> username) -> first();
-        #token => $user -> createToken('API Token of ' . $user -> name) -> plainTextToken
 
         return redirect()->intended('home')->withSUccess('Přihlášeno');
     }
 
     public function logout(){
-        Auth::user() -> currentAccessToken() -> delete();
         Session::flush();
         Auth::logout();
         return Redirect('login')->withSuccess('Byli jste úspěšně odhlášeni');
@@ -45,6 +42,20 @@ class AuthController extends Controller
         return $this -> success([
             'user' => $user,
             'user_details' => $userDetails
+        ]);
+    }
+
+    public function register(StoreUserRequest $request){
+        $request -> validated($request -> all());
+
+        $user = User::create([
+            'username' => $request -> username,
+            'password' => Hash::make($request -> password),
+        ]);
+
+        return $this -> response()->json([
+            'user' => $user,
+            'token' => $user -> createToken('API Token of ' . $user -> name) -> plainTextToken
         ]);
     }
 }
