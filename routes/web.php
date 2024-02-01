@@ -13,6 +13,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
 });
+
+//Public Routes
+Route::get('/login', [AuthController::class, 'index'])->name('login');
+
+Route::group(['middleware' => ['auth:sanctum']], function(){
+    Route::get('/logout', [AuthController::class, 'logout']->name('logout'));
+});
+

@@ -29,7 +29,7 @@ class AuthController extends Controller
         $user = User::where('username', $request -> username) -> first();
         #token => $user -> createToken('API Token of ' . $user -> name) -> plainTextToken
 
-        return redirect()->intended('dashboard')->withSUccess('Přihlášeno');
+        return redirect()->intended('home')->withSUccess('Přihlášeno');
     }
 
     public function logout(){
@@ -37,13 +37,6 @@ class AuthController extends Controller
         Session::flush();
         Auth::logout();
         return Redirect('login')->withSuccess('Byli jste úspěšně odhlášeni');
-    }
-
-    public function dashboard(){
-        if(Auth::check()){
-            return view('auth.dashboard');
-        }
-        return redirect("login")->withSuccess('Neoprávněný přístup');
     }
 
     public function getUser(){
