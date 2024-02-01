@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DataController;
 use Illuminate\Http\Request;
 /*
 |--------------------------------------------------------------------------
@@ -25,6 +26,6 @@ Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 //Protected Routes
 Route::group(['middleware' => ['auth:sanctum']], function(){
-
+    Route::get('/', [DataController::class, 'index'])->name('home');
 });
 
