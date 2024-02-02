@@ -1,4 +1,6 @@
 @extends('layout')
 @section('content')
-<h6>Dashboard</h6>
+
+    <p>{{ $data }}</p>
+
 @endsection
