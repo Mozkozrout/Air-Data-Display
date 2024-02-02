@@ -13,23 +13,24 @@ class DataController extends Controller
     }
 
     private function fetchData(){
-        $token = '37BnlLu_FSDxEscl5oLZ6AAMPl7wjo64';
+        $token = "37BnlLu_FSDxEscl5oLZ6AAMPl7wjo64";
 
-        $http = new \GuzzleHttp\Client([
-            'verify' => base_path('cacert.pem'),
-        ]);
-
-        var_dump($response = Http::setClient($http)
-            ->withHeaders([
-                'Authorization' => 'Bearer ' . $token,
-                'Cache-Control' => 'no-cache',
-                'Accept' => 'application/vnd.api+json',
-                'Content-type' => 'application/vnd.api+json',
-            ])
-            ->get('http://airmonitor.k42.app/items/measurments'));
+        $response = Http::withUrlParameters([
+            'endpoint' => 'http://airmonitor.k42.app',
+            'page' => 'items',
+            'collection' => 'measurments'
+        ])
+            ->withOptions([
+                'verify' => base_path('cacert.pem'),
+                ])
+                ->withQueryParameters([
+                    'access_token' => $token //<--- I would add it like "withToken" or using "withHeaders" but it kept adding it like an array with one item
+                ])
+            ->get('{+endpoint}/{page}/{collection}');
 
         if($response->ok()){
-            return json_decode($response->getBody(), true);
+            dd(json_decode($response->getBody(), true));
+            return json_decode($response->getBody(), true)['data'];
         }
 
         else{
