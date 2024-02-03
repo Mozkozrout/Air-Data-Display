@@ -47,7 +47,7 @@ class DataController extends Controller
 
         else{
             $error = json_decode($response->getBody(), true);
-            return 'Chyba: ' . $error['errors']['0']['message'] . ' Code: ' . $response->getStatusCode();
+            return 'Error: ' . $error['errors']['0']['message'] . ' Code: ' . $response->getStatusCode();
         }
     }
 
