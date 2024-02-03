@@ -10,8 +10,16 @@ class DataController extends Controller
 {
     public function index(){
         $data = $this->fetchData();
-        $data = array_slice($data, 0, 20);
+        $data = $this->sortData($data);
         return view('dashboard', ['data' => $data]);
+    }
+
+    private function sortData($data){
+        usort($data, function($a, $b) {
+            return strcmp($b['date_created'], $a['date_created']);
+          });
+          $data = array_slice($data, 0, 20);
+          return $data;
     }
 
     private function fetchData(){
@@ -32,10 +40,6 @@ class DataController extends Controller
 
         if($response->ok()){
             $data = json_decode($response->getBody(), true)['data'];
-            usort($data, function($a, $b) {
-                return strcmp($b['date_created'], $a['date_created']);
-              });
-
             return $data;
         }
 
