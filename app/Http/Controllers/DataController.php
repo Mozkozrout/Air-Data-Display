@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Auth;
 
 class DataController extends Controller
 {
@@ -14,7 +15,7 @@ class DataController extends Controller
     }
 
     private function fetchData(){
-        $token = "37BnlLu_FSDxEscl5oLZ6AAMPl7wjo64";
+        $token = Auth::user()->API_token;
 
         $response = Http::withUrlParameters([
             'endpoint' => 'http://airmonitor.k42.app',
