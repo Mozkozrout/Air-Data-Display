@@ -9,6 +9,7 @@ class DataController extends Controller
 {
     public function index(){
         $data = $this->fetchData();
+        $data = array_slice($data, 0, 20);
         return view('dashboard', ['data' => $data]);
     }
 
@@ -24,12 +25,17 @@ class DataController extends Controller
                 'verify' => base_path('cacert.pem'),
                 ])
                 ->withQueryParameters([
-                    'access_token' => "kekel" //<--- I would add it like "withToken" or using "withHeaders" but it kept adding it like an array with one item
+                    'access_token' => $token //<--- I would add it using "withToken" or using "withHeaders" but it kept adding it like an array with one item
                 ])
             ->get('{+endpoint}/{page}/{collection}');
 
         if($response->ok()){
-            return json_decode($response->getBody(), true)['data'];
+            $data = json_decode($response->getBody(), true)['data'];
+            usort($data, function($a, $b) {
+                return strcmp($b['date_created'], $a['date_created']);
+              });
+
+            return $data;
         }
 
         else{
