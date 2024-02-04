@@ -13,38 +13,41 @@ use Session;
 class AuthController extends Controller
 {
 
+    /**
+     * Function that simply calls the login view
+     */
     public function index()
     {
         return view('auth.login');
     }
 
+    /**
+     * Function that actually does the login through custom LoginUserRequest
+     */
     public function handleLogin(LoginUserRequest $request){
         $request -> validated($request -> all());
 
         if(!Auth::attempt($request -> only(['username', 'password']))){
-            return redirect("login")->withSuccess("Špatné přihlašovací údaje");
+            return redirect("login")->withSuccess("Wrong Credentialls");
         }
 
         $user = User::where('username', $request -> username) -> first();
 
-        return redirect()->intended('home')->withSUccess('Přihlášeno');
+        return redirect()->intended('/')->withSUccess('Logged in');
     }
 
+    /**
+     * Simple logout function
+     */
     public function logout(){
         Session::flush();
         Auth::logout();
         return Redirect('login')->withSuccess('Byli jste úspěšně odhlášeni');
     }
 
-    public function getUser(){
-        $user = Auth::user();
-
-        return $this -> success([
-            'user' => $user,
-            'user_details' => $userDetails
-        ]);
-    }
-
+    /**
+     * Function for registering new users which is not really all that utilised here, i used it only so i have one user in the database to use
+     */
     public function register(StoreUserRequest $request){
         $request -> validated($request -> all());
 

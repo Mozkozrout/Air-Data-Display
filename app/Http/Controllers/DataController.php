@@ -9,13 +9,21 @@ use App\Models\Data;
 
 class DataController extends Controller
 {
+    /**
+     * Function that runs when going to homepage (viewing the data after logging in)
+     */
     public function index(){
-        $data = Data::all()->sortByDesc('date_created')->take(20);
+        $data = Data::all()->sortByDesc('date_created')->take(20); //<--- Loads data from database, sorts them by the date and uses only the 20 newest records
         return view('dashboard', ['data' => $data]);
     }
 
+    /**
+     * Function used for loading the data from API to the app database, i did this because if this was a real app, i wouldn't want my users to spam requests to the
+     * API each time they'd refresh the page. They should only spam my database which is going to get periodically refreshed. Actually to take things even further,
+     * I should probably implement some sort of a cache for this so i wouldn't strain my database too much. I should probably also limit the amount of requests too.
+     */
     private function fetchData(){
-        $token = Auth::user()->API_token;
+        $token = Auth::user()->API_token; //<--- I stored the token to the database to the user table, but i realise it's not the best when i want to schedule this function
 
         $response = Http::withUrlParameters([
             'endpoint' => 'http://airmonitor.k42.app',
@@ -32,16 +40,19 @@ class DataController extends Controller
 
         if($response->ok()){
             $data = json_decode($response->getBody(), true)['data'];
-            $data = $this->updateDB($data);
+            $data = $this->updateDB($data); //<--- If the data are returned they get saved into the app database
             return $data;
         }
 
         else{
             $error = json_decode($response->getBody(), true);
-            return 'Error: ' . $error['errors']['0']['message'] . ' Code: ' . $response->getStatusCode();
+            return 'Error: ' . $error['errors']['0']['message'] . ' Code: ' . $response->getStatusCode(); //<--- Otherwise error is shown
         }
     }
 
+    /**
+     * Function that stores the data into the database
+     */
     private function updateDB($data){
         $modelData = [];
         foreach($data as $item){

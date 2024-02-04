@@ -19,6 +19,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+    /**
+     * I added this just so i could register a user through Postman
+     */
 //Route::post('/register', [AuthController::class, 'register']);
 Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::post('/register', [AuthController::class, 'register']);
