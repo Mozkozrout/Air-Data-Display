@@ -13,7 +13,11 @@ class DataController extends Controller
      * Function that runs when going to homepage (viewing the data after logging in)
      */
     public function index(){
-        $data = Data::all()->sortByDesc('date_created')->take(20); //<--- Loads data from database, sorts them by the date and uses only the 20 newest records
+        try{
+            $data = Data::all()->sortByDesc('date_created')->take(20);//<--- Loads data from database, sorts them by the date and uses only the 20 newest records
+         } catch(Exception $ex){
+            $data = $this->fetchData();//<--- if data loading failes, app refreshes them
+         }
         return view('dashboard', ['data' => $data]);
     }
 
@@ -23,11 +27,16 @@ class DataController extends Controller
      * I should probably implement some sort of a cache for this so i wouldn't strain my database too much. I should probably also limit the amount of requests too.
      *
      * Originally i intended to call this function every time the user wants to view the data, that is why it is written the way it is written. However now, when i
-     * reworked this app to use database and to utilise this function to refresh the data in databse on schedule I realise that the need to be logged in to access the
-     * token and also the fact that this function returns the data or error message is pretty cumbersome.
+     * reworked this app to use database and to utilise this function to refresh the data in database on schedule I realise that the need to be logged in to access the
+     * token and also the fact that this function returns the data or error message is pretty cumbersome. However It can still be called manually or when loading the data
+     * from database fails.
      */
-    private function fetchData(){
-        $token = Auth::user()->API_token; //<--- I stored the token to the database to the user table, but i realise it's not the best when i want to schedule this function
+    public function fetchData(){
+        try{
+            $token = Auth::user()->API_token; //<--- I stored the token to the database to the user table, but i realise it's not the best when i want to schedule this function
+        }catch(Exception $ex){
+            $token = '37BnlLu_FSDxEscl5oLZ6AAMPl7wjo64'; //<--- yeah it is not exactly safe and its a bit dumb considering i put this into the DB to make it safer
+        }
 
         $response = Http::withUrlParameters([
             'endpoint' => 'http://airmonitor.k42.app',
@@ -45,7 +54,8 @@ class DataController extends Controller
         if($response->ok()){
             $data = json_decode($response->getBody(), true)['data'];
             $data = $this->updateDB($data); //<--- If the data are returned they get saved into the app database
-            return $data;
+            //return $data;
+            return redirect()->intended('/')->withSUccess('Data Refreshed');
         }
 
         else{
@@ -81,8 +91,7 @@ class DataController extends Controller
                 'valid' => $item['valid'],
             ]));
         }
-
-        return $modelData;
+        return $modelData; //<--- returns array of Data objects
     }
 }
 

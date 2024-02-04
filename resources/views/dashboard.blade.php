@@ -114,7 +114,7 @@
     </div>
 
     <div class="d-grid mx-auto mb-5 col-md-3">
-        <button class="btn btn-outline-primary" href="{{ route('data.refresh') }}">Refresh Data</button>
+        <button class="btn btn-outline-primary" onclick="window.location='{{ route("data.refresh") }}'">Refresh Data</button>
     </div>
 
 @endif
