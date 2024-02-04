@@ -12,7 +12,12 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        $schedule->call('App\Http\Controllers\DataController@fetchData')->everyHour();
+        /**
+         * Since this needs the api token which is stored inside the user table in the database, it won't work correctly
+         * when the server tries to call this function and user isn't logged in. It will probably return some sort of an
+         * error and the data won't get refreshed so the user will see the old data from the database.
+         */
+        $schedule->call('App\Http\Controllers\DataController@fetchData')->hourly();
     }
 
     /**
