@@ -21,6 +21,10 @@ class DataController extends Controller
      * Function used for loading the data from API to the app database, i did this because if this was a real app, i wouldn't want my users to spam requests to the
      * API each time they'd refresh the page. They should only spam my database which is going to get periodically refreshed. Actually to take things even further,
      * I should probably implement some sort of a cache for this so i wouldn't strain my database too much. I should probably also limit the amount of requests too.
+     *
+     * Originally i intended to call this function every time the user wants to view the data, that is why it is written the way it is written. However now, when i
+     * reworked this app to use database and to utilise this function to refresh the data in databse on schedule I realise that the need to be logged in to access the
+     * token and also the fact that this function returns the data or error message is pretty cumbersome.
      */
     private function fetchData(){
         $token = Auth::user()->API_token; //<--- I stored the token to the database to the user table, but i realise it's not the best when i want to schedule this function
