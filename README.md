@@ -1,3 +1,21 @@
+To run the app:
+1. Download it
+2. Run "composer install" command
+3. configure your Databse connection in .env file
+4. Run "php artisan migrate" command
+5. To start the server run "php artisan serve" or use your own server
+6. ???
+7. Profit
+
+It's an app that lets the user view Air measurement data loaded from an external API.
+
+I wasn't sure whether this app is supposed to have any login functionality so i added it to be sure since the Assignment doc mentioned something about admin access. I also wasn't sure whether those data are real or anything so i didn't want to risk exposing them. I am not sure if basic laravel html templates with Bootstrap count as slick design but that is what i did. Also initially i made the app to simply load the data from the API with each refresh but since i already had the database there i decided to make a table for the data too and load them in there. I made this run on the schedule too but my hosting doesn't support cronjobs sadly, the code is there tho. I did this cause if this was a real app i wouldn't want my users to spam the API with all those concurrent requests each time they view the page. To make this even better i could probably implement a cache and a limiter. 
+
+
+
+
+
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">
