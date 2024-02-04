@@ -27,5 +27,6 @@ Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 //Protected Routes
 Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::get('/', [DataController::class, 'index'])->name('home');
+    Route::get('/refresh', [DataController::class, 'fetchData'])->name('data.refresh');
 });
 
