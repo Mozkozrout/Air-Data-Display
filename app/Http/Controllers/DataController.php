@@ -10,17 +10,8 @@ use App\Models\Data;
 class DataController extends Controller
 {
     public function index(){
-        $data = $this->fetchData();
-        $data = $this->sortData($data);
+        $data = Data::all()->sortByDesc('date_created')->take(20);
         return view('dashboard', ['data' => $data]);
-    }
-
-    private function sortData($data){
-        usort($data, function($a, $b) {
-            return strcmp($b['date_created'], $a['date_created']);
-          });
-          $data = array_slice($data, 0, 20);
-          return $data;
     }
 
     private function fetchData(){

@@ -30,27 +30,27 @@
                         <div class="container text-right">
                             <div class="row p-1 border-bottom">
                                 <div class="col">
-                                    Temperature: {{ $data[0]['temperature'] }}
+                                    Temperature: {{ $data->first()['temperature'] }}
                                 </div>
                                 <div class="col">
-                                    Humidity: {{ $data[0]['humidity'] }}
+                                    Humidity: {{ $data->first()['humidity'] }}
                                 </div>
                             </div>
                             <div class="row p-1 border-bottom">
                                 <div class="col">
-                                    CO2: {{ $data[0]['co2'] }}
+                                    CO2: {{ $data->first()['co2'] }}
                                 </div>
                                 <div class="col">
-                                    PM25: {{ $data[0]['pm25'] }}
+                                    PM25: {{ $data->first()['pm25'] }}
                                 </div>
                                 <div class="col">
-                                    PM10: {{ $data[0]['pm10'] }}
+                                    PM10: {{ $data->first()['pm10'] }}
                                 </div>
                                 <div class="col">
-                                    CH20: {{ $data[0]['c2ho'] }}
+                                    CH20: {{ $data->first()['c2ho'] }}
                                 </div>
                                 <div class="col">
-                                    TVOC: {{ $data[0]['tvoc'] }}
+                                    TVOC: {{ $data->first()['tvoc'] }}
                                 </div>
                             </div>
                             <p class="text-secondary">
