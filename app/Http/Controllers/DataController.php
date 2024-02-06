@@ -28,12 +28,12 @@ class DataController extends Controller
      *
      * Originally i intended to call this function every time the user wants to view the data, that is why it is written the way it is written. However now, when i
      * reworked this app to use database and to utilise this function to refresh the data in database on schedule I realise that the need to be logged in to access the
-     * token and also the fact that this function returns the data or error message is pretty cumbersome. However It can still be called manually or when loading the data
-     * from database fails.
+     * token and also the fact that this function returns the data or error message is pretty cumbersome. That is why i have put the api key to the .env file now.
      */
     public function fetchData(){
         try{
-            $token = Auth::user()->API_token; //<--- I stored the token to the database to the user table, but i realise it's not the best when i want to schedule this function
+            //$token = Auth::user()->API_token; //<--- I stored the token to the database to the user table, but i realise it's not the best when i want to schedule this function
+            $token = config('services.api.key');
         }catch(Exception $ex){
             $token = '37BnlLu_FSDxEscl5oLZ6AAMPl7wjo64'; //<--- yeah it is not exactly safe and its a bit dumb considering i put this into the DB to make it safer
         }

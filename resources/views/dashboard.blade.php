@@ -113,9 +113,11 @@
         </div>
     </div>
 
+    <!-- I have added this button for testing purposes, it manually calls the DB refresh function, i use it as my hosting doesn't support custom cromjob
     <div class="d-grid mx-auto mb-5 col-md-3">
         <button class="btn btn-outline-primary" onclick="window.location='{{ route("data.refresh") }}'">Refresh Data</button>
     </div>
+    -->
 
 @endif
 @endsection

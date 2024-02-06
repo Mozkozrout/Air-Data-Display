@@ -13,9 +13,8 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         /**
-         * Since this needs the api token which is stored inside the user table in the database, it won't work correctly
-         * when the server tries to call this function and user isn't logged in. It will probably return some sort of an
-         * error and the data won't get refreshed so the user will see the old data from the database.
+         * This is the code that would periodically refresh the database with data from your API, tho my hosting doesn't support custom crom job.
+         * I would also normally set it to maybe every 5 minutes or so but i didn't want to spam your API too much.
          */
         $schedule->call('App\Http\Controllers\DataController@fetchData')->hourly();
     }
